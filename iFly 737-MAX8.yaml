@@ -1,5 +1,7 @@
 # Flight1 iFly 737 Max - Boeing 737-8 Max V1.0
 # Created by Hawks1326.
+include:
+- modules/FSDT_GSX.yaml
 master:
 - get: L:VC_Throttle_1_V5_SW_VAL, Number
   set: "`${Math.min(100, Math.max(0, 100 - value))} (>L:VC_Throttle_1_trigger_VAL)`"
