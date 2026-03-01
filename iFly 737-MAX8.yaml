@@ -1,4 +1,4 @@
-# Flight1 iFly 737 Max - Boeing 737-8 Max V1.1
+# Flight1 iFly 737 Max - Boeing 737-8 Max V1.2
 # Created by Hawks1326.
 include:
 - modules/FSDT_GSX.yaml
@@ -213,16 +213,28 @@ shared:
 - get: L:VC_Bus_Transfer_SW_VAL,number
   set: "`${value > current ? 13 : 14} (>L:VC_Electrical_trigger_VAL)`"
 - get: L:VC_ENG_1_Generator_SW_VAL,number
-  set: "`${value > current ? '22 (>L:VC_Electrical_trigger_VAL)' : '21 (>L:VC_Electrical_trigger_VAL)'}`"
+  set: |
+    if (value < 5) return '21 (>L:VC_Electrical_trigger_VAL)'
+    if (value >= 15) return '22 (>L:VC_Electrical_trigger_VAL)'
+    return ''
   skp: L:VC_ENG_1_Generator_SW_VAL
 - get: L:VC_APU_Generator_1_SW_VAL,number
-  set: "`${value > current ? '26 (>L:VC_Electrical_trigger_VAL)' : '25 (>L:VC_Electrical_trigger_VAL)'}`"
+  set: |
+    if (value < 5) return '25 (>L:VC_Electrical_trigger_VAL)'
+    if (value >= 15) return '26 (>L:VC_Electrical_trigger_VAL)'
+    return ''
   skp: L:VC_APU_Generator_1_SW_VAL
 - get: L:VC_APU_Generator_2_SW_VAL,number
-  set: "`${value > current ? '28 (>L:VC_Electrical_trigger_VAL)' : '27 (>L:VC_Electrical_trigger_VAL)'}`"
+  set: |
+    if (value < 5) return '27 (>L:VC_Electrical_trigger_VAL)'
+    if (value >= 15) return '28 (>L:VC_Electrical_trigger_VAL)'
+    return ''
   skp: L:VC_APU_Generator_2_SW_VAL
 - get: L:VC_ENG_2_Generator_SW_VAL,number
-  set: "`${value > current ? '24 (>L:VC_Electrical_trigger_VAL)' : '23 (>L:VC_Electrical_trigger_VAL)'}`"
+  set: |
+    if (value < 5) return '23 (>L:VC_Electrical_trigger_VAL)'
+    if (value >= 15) return '24 (>L:VC_Electrical_trigger_VAL)'
+    return ''
   skp: L:VC_ENG_2_Generator_SW_VAL
 - get: L:VC_Wiper_L_SW_VAL,number
   set: |
@@ -423,9 +435,8 @@ shared:
 - get: L:VC_APU_SW_VAL,number
   set: |
     if (value < 5 && current >= 5) return '7 (>L:VC_Engine_APU_trigger_VAL)'
-    if (value < 5 && current >= 15) return '7 (>L:VC_Engine_APU_trigger_VAL) 7 (>L:VC_Engine_APU_trigger_VAL)'
     if (value >= 5 && value < 15 && current < 5) return '8 (>L:VC_Engine_APU_trigger_VAL)'
-    if (value >= 5 && value < 15 && current >= 15) return '7 (>L:VC_Engine_APU_trigger_VAL)'
+    if (value >= 5 && value < 15 && current >= 15) return ''
     if (value >= 15 && current < 5) return '8 (>L:VC_Engine_APU_trigger_VAL) 8 (>L:VC_Engine_APU_trigger_VAL)'
     if (value >= 15 && current < 15) return '8 (>L:VC_Engine_APU_trigger_VAL)'
     return ''
@@ -832,7 +843,11 @@ shared:
 - get: L:VC_ISFD_BARO_SW_STD_VAL,number
   set: "`${value > current ? 108 : 107} (>L:VC_Instruments_trigger_VAL)`"
 - get: L:VC_Gear_Lever_VAL,number
-  set: "`${value > current ? 1 : 2} (>L:VC_Gear_trigger_VAL)`"
+  set: |
+    if (value <= 50 && current > 50) return '1 (>L:VC_Gear_trigger_VAL)'
+    if (value > 50 && current <= 50) return '2 (>L:VC_Gear_trigger_VAL)'
+    return ''
+  skp: L:VC_Gear_Lever_VAL
 - get: L:VC_Gear_Lock_Override_SW_VAL,number
   set: "`${value > current ? 3 : 4} (>L:VC_Gear_trigger_VAL)`"
 - get: L:VC_Gear_Steering_SW_VAL,number
