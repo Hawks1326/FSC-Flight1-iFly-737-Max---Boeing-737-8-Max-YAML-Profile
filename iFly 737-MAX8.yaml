@@ -843,10 +843,7 @@ shared:
 - get: L:VC_ISFD_BARO_SW_STD_VAL,number
   set: "`${value > current ? 108 : 107} (>L:VC_Instruments_trigger_VAL)`"
 - get: L:VC_Gear_Lever_VAL,number
-  set: |
-    if (value <= 50 && current > 50) return '1 (>L:VC_Gear_trigger_VAL)'
-    if (value > 50 && current <= 50) return '2 (>L:VC_Gear_trigger_VAL)'
-    return ''
+  set: "`${value <= 50 ? 1 : 2} (>L:VC_Gear_trigger_VAL)`"
   skp: L:VC_Gear_Lever_VAL
 - get: L:VC_Gear_Lock_Override_SW_VAL,number
   set: "`${value > current ? 3 : 4} (>L:VC_Gear_trigger_VAL)`"
